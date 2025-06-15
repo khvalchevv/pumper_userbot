@@ -1,1 +1,1 @@
-start: python userbot_parser.py
+worker: python userbot_parser.py
