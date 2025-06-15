@@ -1,3 +1,5 @@
+from flask import Flask
+import threading
 from telethon import TelegramClient, events
 import asyncio
 import os
@@ -32,6 +34,18 @@ async def handler(event):
 async def main():
     me = await client.get_me()
     print(f"🤖 Logged in as: {me.username}")
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Userbot is alive!"
+
+def run_flask():
+    app.run(host="0.0.0.0", port=8080)
+
+flask_thread = threading.Thread(target=run_flask)
+flask_thread.start()
 
 client.start()
 client.loop.run_until_complete(main())
