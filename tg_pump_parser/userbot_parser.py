@@ -19,18 +19,23 @@ client = TelegramClient(session_name, api_id, api_hash)
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
+    if not event.message or not event.raw_text:
+        return  # захист від крашу
     text = event.raw_text.lower()
     if any(token.lower() in text for token in TOKENS):
-        await client.send_message(
-            entity=TARGET_CHAT_ID,
-            message=event.message,
-            reply_to=TARGET_THREAD_ID
-        )
-        print(f"🟢 Forwarded: {event.raw_text}")
+        try:
+            await client.send_message(
+                entity=TARGET_CHAT_ID,
+                message=event.message,
+                reply_to=TARGET_THREAD_ID
+            )
+            print(f"🟢 Forwarded: {event.raw_text}")
+        except Exception as e:
+            print(f"⚠️ Failed to forward: {e}")
     else:
         print(f"🔴 Skipped: {event.raw_text}")
 
-# Flask server для Railway
+# Flask сервер для Railway
 app = Flask(__name__)
 
 @app.route("/")
@@ -44,4 +49,9 @@ def run_flask():
 flask_thread = threading.Thread(target=run_flask)
 flask_thread.start()
 
-client.run_until_disconnected()
+try:
+    client.start()
+    client.run_until_disconnected()
+except Exception as e:
+    print(f"❌ Unexpected error: {e}")
+
