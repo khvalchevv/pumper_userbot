@@ -1,1 +1,1 @@
-worker: python3 tg_pump_parser/userbot_parser.py
+worker: python3 userbot_parser.py
