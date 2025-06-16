@@ -12,7 +12,7 @@ session_name = "user_session"  # ім'я сесії .session-файлу
 SOURCE_CHANNEL = "dt_5p"  # Канал з якого парсиш
 TARGET_CHAT_ID = -1002604238211
 TARGET_THREAD_ID = 1745
-TOKENS = ["$dbr", "$elde", "$gear", "$tibbir", "$white", "$shm", "$EGL1", "$GFM", "$IRISVIRTUAL"]
+TOKENS = ["$dbr", "$elde", "$gear", "$tibbir", "$white", "$shm", "$EGL1", "$GFM", "$IRISVIRTUAL","ynd","velaai"]
 
 # Ініціалізація клієнта
 client = TelegramClient(session_name, api_id, api_hash)
