@@ -9,7 +9,6 @@ api_hash = "db2bf3b16f1788d38091014befe31c0d"
 
 session_name = "user_session"  # ім'я сесії .session-файлу
 
-# Цільові параметри
 SOURCE_CHANNEL = "dt_5p"  # Канал з якого парсиш
 TARGET_CHAT_ID = -1002604238211
 TARGET_THREAD_ID = 1745
