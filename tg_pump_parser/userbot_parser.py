@@ -3,7 +3,7 @@ from telethon import TelegramClient, events
 # Твої дані
 api_id = 22965618
 api_hash = "d2b073b1f61788d3809101abefe31c0d"
-session_name = "tg_pump_parser/user_session"
+session_name = "user_session"
 
 # 🔧 Ініціалізація Telethon клієнта — ВАЖЛИВО щоб було ПЕРЕД @client.on!
 client = TelegramClient(session_name, api_id, api_hash)
