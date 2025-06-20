@@ -13,16 +13,20 @@ TARGET_THREAD_ID = 1745
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
+    if not event.message.message:
+        return  # ігноруємо картинки, стікери тощо
+
     text = event.raw_text.upper()
+
     if any(token in text for token in TOKENS):
         await client.send_message(
             entity=TARGET_CHAT_ID,
             message=event.message,
             reply_to=TARGET_THREAD_ID
         )
-        print(f"✅ Forwarded (matched): {text[:100]}")
+        print(f"✅ Forwarded: {text[:100]}")
     else:
-        print("⏭️ Skipped (no match)")
+        print("⏭️ Skipped")
 
 client.start()
 print("🟢 Userbot started")
