@@ -24,9 +24,9 @@ async def handler(event):
             message=event.message,
             reply_to=TARGET_THREAD_ID
         )
-        print(f"✅ Forwarded: {text[:100]}")
+        print(f"✅ Forwarded: {text[:100]}", flush=True)
     else:
-        print("⏭️ Skipped")
+        print("⏭️ Skipped", flush=True)
 
 client.start()
 print("🟢 Userbot started")
