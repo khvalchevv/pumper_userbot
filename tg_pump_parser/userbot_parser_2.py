@@ -5,7 +5,7 @@ import os
 
 api_id = 22965618
 api_hash = "d2b073b1f61788d3809101abefe31c8d"
-session_name = "user_session"
+session_name = "user_session_gate"
 
 client = TelegramClient(session_name, api_id, api_hash)
 
