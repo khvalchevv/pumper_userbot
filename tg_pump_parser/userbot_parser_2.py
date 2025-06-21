@@ -22,6 +22,16 @@ if os.path.exists(TOKENS_TRACK_FILE):
 else:
     token_counts = {}
 
+async def preload_token_counts():
+    messages = await client.get_messages(SOURCE_CHANNEL_2, limit=100)
+    for msg in messages:
+        if msg.text:
+            tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", msg.text)
+            for token in tokens:
+                token = token.upper()
+                if token not in SELECTED_TOKENS:
+                    token_counts[token] = token_counts.get(token, 0) + 1
+
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL_2))
 async def handler(event):
     text = event.raw_text
@@ -46,11 +56,13 @@ async def handler(event):
                 message=event.message,
                 reply_to=TARGET_THREAD_ID_2
             )
-            print(f"🆕 NEW {token}: {count + 1}/2")
+            print(f"🆕 NEW {token}: {count + 1}/3")
             with open(TOKENS_TRACK_FILE, "w") as f:
                 json.dump(token_counts, f)
             return
 
 client.start()
 print("✅ Second userbot started")
-client.run_until_disconnected()
+with client:
+    client.loop.run_until_complete(preload_token_counts())
+    client.run_until_disconnected()
