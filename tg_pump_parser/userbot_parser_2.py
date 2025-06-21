@@ -14,7 +14,7 @@ TARGET_CHAT_ID_2 = -1002604238211
 TARGET_THREAD_ID_2 = 2899
 
 SELECTED_TOKENS = ["STMX", "PAWS", "IDOL", "ELDE", "SPK", "EDGEN", "ELDE", "PRAI", "WLD", "NEIRO", "BLUE", "BOND", "WHY", "ORDER", "FLY", "KEY", "LUCE", "ZCX", "KILO", "BID", "SHM", "PAAL", "BLZ", "OMG", "AMB", "IMT", "PFWS",]
-TOKENS_TRACK_FILE = "forwarded_tokens.json"
+TOKENS_TRACK_FILE = "forwarded_tokens_gate.json"
 
 if os.path.exists(TOKENS_TRACK_FILE):
     with open(TOKENS_TRACK_FILE, "r") as f:
