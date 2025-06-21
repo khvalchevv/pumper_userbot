@@ -14,7 +14,7 @@ TARGET_CHAT_ID = -1002604238211
 TARGET_THREAD_ID = 1745
 
 SELECTED_TOKENS = ["DBR", "ELDE", "GEAR", "WHITE", "SHM", "EGL1", "GFM", "LMWR", "AMB", "EDGEN", "GHIBLI", "BID", "AURASOL"]
-TOKENS_TRACK_FILE = "forwarded_tokens.json"
+TOKENS_TRACK_FILE = "forwarded_tokens_mexc.json"
 
 # Завантажити лічильники токенів
 if os.path.exists(TOKENS_TRACK_FILE):
