@@ -23,6 +23,17 @@ if os.path.exists(TOKENS_TRACK_FILE):
 else:
     token_counts = {}
 
+# 🔄 Попередній аналіз історії (1000 повідомлень)
+async def preload_token_counts():
+    async for msg in client.iter_messages(SOURCE_CHANNEL, limit=1000):
+        if msg.text:
+            tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", msg.text)
+            for token in tokens:
+                token = token.upper()
+                if token not in SELECTED_TOKENS:
+                    token_counts[token] = token_counts.get(token, 0) + 1
+
+# 🔁 Обробка нових повідомлень
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
     text = event.raw_text
@@ -37,6 +48,7 @@ async def handler(event):
                 reply_to=TARGET_THREAD_ID
             )
             print(f"✅ SELECTED: {token}")
+            return
         else:
             count = token_counts.get(token, 0)
             if count < 3:
@@ -50,7 +62,9 @@ async def handler(event):
 
                 with open(TOKENS_TRACK_FILE, "w") as f:
                     json.dump(token_counts, f)
+                return
 
 print("✅ First userbot (MEXC) started")
 client.start()
+client.loop.run_until_complete(preload_token_counts())
 client.run_until_disconnected()
