@@ -13,17 +13,23 @@ SOURCE_CHANNEL_2 = "gate_5p"
 TARGET_CHAT_ID_2 = -1002604238211
 TARGET_THREAD_ID_2 = 2899
 
-SELECTED_TOKENS = ["STMX", "PAWS", "IDOL", "ELDE", "SPK", "EDGEN", "ELDE", "PRAI", "WLD", "NEIRO", "BLUE", "BOND", "WHY", "ORDER", "FLY", "KEY", "LUCE", "ZCX", "KILO", "BID", "SHM", "PAAL", "BLZ", "OMG", "AMB", "IMT", "PFWS",]
+SELECTED_TOKENS = [
+    "STMX", "PAWS", "IDOL", "ELDE", "SPK", "EDGEN", "PRAI", "WLD", "NEIRO", "BLUE",
+    "BOND", "WHY", "ORDER", "FLY", "KEY", "LUCE", "ZCX", "KILO", "BID", "SHM",
+    "PAAL", "BLZ", "OMG", "AMB", "IMT", "PFWS"
+]
 TOKENS_TRACK_FILE = "forwarded_tokens_gate.json"
 
+# Завантажити лічильники з файлу або ініціалізувати
 if os.path.exists(TOKENS_TRACK_FILE):
     with open(TOKENS_TRACK_FILE, "r") as f:
         token_counts = json.load(f)
 else:
     token_counts = {}
 
+# Просканувати історію перед запуском
 async def preload_token_counts():
-    messages = await client.get_messages(SOURCE_CHANNEL_2, limit=100)
+    messages = await client.get_messages(SOURCE_CHANNEL_2, limit=1000)
     for msg in messages:
         if msg.text:
             tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", msg.text)
@@ -31,6 +37,8 @@ async def preload_token_counts():
                 token = token.upper()
                 if token not in SELECTED_TOKENS:
                     token_counts[token] = token_counts.get(token, 0) + 1
+    with open(TOKENS_TRACK_FILE, "w") as f:
+        json.dump(token_counts, f)
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL_2))
 async def handler(event):
@@ -61,8 +69,10 @@ async def handler(event):
                 json.dump(token_counts, f)
             return
 
-client.start()
 print("✅ Second userbot started")
+client.start()
 with client:
+    client.loop.run_until_complete(preload_token_counts())
+    client.run_until_disconnected()
     client.loop.run_until_complete(preload_token_counts())
     client.run_until_disconnected()
