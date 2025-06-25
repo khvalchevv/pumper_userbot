@@ -13,7 +13,7 @@ TARGET_THREAD_ID = 1745
 
 SELECTED_TOKENS = [
     "DBR", "ELDE", "GEAR", "WHITE", "SHM", "EGL1", "GFM",
-    "LMWR", "AMB", "EDGEN", "GHIBLI", "BID", "AURASOL"
+    "UPTOP", "AMB", "EDGEN", "MYX", "BID", "AURASOL", "IRISVIRTUAL", "TAG", "NEIROETH", "IDOL",
 ]
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
