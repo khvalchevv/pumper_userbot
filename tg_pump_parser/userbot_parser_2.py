@@ -18,18 +18,20 @@ SELECTED_TOKENS = [
     "BOND", "WHY", "ORDER", "FLY", "KEY", "LUCE", "ZCX", "KILO", "BID", "SHM",
     "PAAL", "BLZ", "OMG", "AMB", "IMT", "PFWS"
 ]
+
 TOKENS_TRACK_FILE = "forwarded_tokens_gate.json"
 
-# Завантажити лічильники з файлу або ініціалізувати
+# Завантажити вже переслані токени
 if os.path.exists(TOKENS_TRACK_FILE):
     with open(TOKENS_TRACK_FILE, "r") as f:
         token_counts = json.load(f)
 else:
     token_counts = {}
 
-# Просканувати історію перед запуском
 async def preload_token_counts():
     messages = await client.get_messages(SOURCE_CHANNEL_2, limit=1000)
+    print(f"📥 Історичних повідомлень отримано: {len(messages)}")
+    preload_count = 0
     for msg in messages:
         if msg.text:
             tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", msg.text)
@@ -37,8 +39,8 @@ async def preload_token_counts():
                 token = token.upper()
                 if token not in SELECTED_TOKENS:
                     token_counts[token] = token_counts.get(token, 0) + 1
-    with open(TOKENS_TRACK_FILE, "w") as f:
-        json.dump(token_counts, f)
+                    preload_count += 1
+    print(f"📊 Завантажено токенів з історії: {preload_count}")
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL_2))
 async def handler(event):
@@ -69,10 +71,8 @@ async def handler(event):
                 json.dump(token_counts, f)
             return
 
-print("✅ Second userbot started")
 client.start()
+print("✅ Second userbot (GATE) started")
 with client:
-    client.loop.run_until_complete(preload_token_counts())
-    client.run_until_disconnected()
     client.loop.run_until_complete(preload_token_counts())
     client.run_until_disconnected()
