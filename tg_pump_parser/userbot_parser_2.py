@@ -28,8 +28,8 @@ else:
     token_counts = {}
 
 async def preload_token_counts():
-    print("⏳ Loading previous 100 messages from history...")
-    messages = await client.get_messages(SOURCE_CHANNEL_2, limit=100)
+    print("⏳ Loading previous 1000 messages from history...")
+    messages = await client.get_messages(SOURCE_CHANNEL_2, limit=1000)
     added = 0
     for msg in messages:
         if msg.text:
