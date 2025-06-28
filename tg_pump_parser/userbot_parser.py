@@ -34,6 +34,3 @@ async def handler(event):
 print("✅ MEXC userbot started")
 client.start()
 client.run_until_disconnected()
-client.start()
-client.loop.run_until_complete(preload_token_counts())
-client.run_until_disconnected()
