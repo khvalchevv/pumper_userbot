@@ -15,6 +15,7 @@ SELECTED_TOKENS = [
     "DBR", "ELDE", "GEAR", "SHM", "EGL1", "GFM",
     "UPTOP", "AMB", "EDGEN", "MYX", "BID", "AURASOL", "IRISVIRTUAL", "TAG", "NEIROETH", "IDOL",
 ]
+SELECTED_TOKENS = [t.upper() for t in SELECTED_TOKENS]
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
@@ -22,15 +23,16 @@ async def handler(event):
     print(f"Incoming: {text}")
 
     found_tokens = re.findall(r"\$([A-Z0-9]{2,10})", text.upper)
-
+    print(f"Found tokens: {found_tokens}")
+d
     for token in found_tokens:
-        if token.upper() in SELECTED_TOKENS:
+        if token in SELECTED_TOKENS:
+            print(f"SELECTED: {token}")
             await client.send_message(
                 entity=TARGET_CHAT_ID,
                 message=event.message,
                 reply_to=TARGET_THREAD_ID
             )
-            print(f"✅ SELECTED: {token}")
             break  # надсилаємо лише один раз на повідомлення
 
 print("✅ MEXC userbot started")
