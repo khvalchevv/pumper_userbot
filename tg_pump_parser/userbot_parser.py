@@ -23,7 +23,7 @@ async def handler(event):
     print(f"Incoming: {text}")
 
     # FIX: виклик text.upper() був без дужок, треба text.upper()
-   found_tokens = re.findall(r"\$([A-Z][A-Z0-9]{1,9})", text.upper())
+    found_tokens = re.findall(r"\$([A-Z][A-Z0-9]{1,9})", text.upper())
     print(f"Found tokens: {found_tokens}")
 
     for token in found_tokens:
