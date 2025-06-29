@@ -14,7 +14,7 @@ TARGET_CHAT_ID_2 = -1002604238211
 TARGET_THREAD_ID_2 = 2899
 
 SELECTED_TOKENS = [
-    "STMX", "PAWS", "IDOL", "ELDE", "SPK", "EDGEN", "PRAI", "WLD", "BLUE", "BOND",
+    "STMX", "PAWS", "IDOL", "ELDE", "SPK", "EDGEN", "PRAI", "WLD", "BLUE",
     "WHY", "ORDER", "FLY", "KEY", "LUCE", "ZCX", "KILO", "BID", "SHM", "BLZ", "OMG",
     "AMB", "IMT", "PFWS"
 ]
