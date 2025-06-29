@@ -19,7 +19,9 @@ SELECTED_TOKENS = [
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
     text = event.raw_text
-    found_tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", text)
+    print(f"Incoming: {text}")
+
+    found_tokens = re.findall(r"\$([A-Z0-9]{2,10})", text.upper)
 
     for token in found_tokens:
         if token.upper() in SELECTED_TOKENS:
