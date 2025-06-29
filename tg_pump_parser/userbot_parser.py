@@ -22,18 +22,21 @@ async def handler(event):
     text = event.raw_text
     print(f"Incoming: {text}")
 
-    found_tokens = re.findall(r"\$([A-Z0-9]{2,10})", text.upper)
+    # FIX: виклик text.upper() був без дужок, треба text.upper()
+    found_tokens = re.findall(r"\$([A-Z0-9]{2,10})", text.upper())
     print(f"Found tokens: {found_tokens}")
-d
+
     for token in found_tokens:
         if token in SELECTED_TOKENS:
-            print(f"SELECTED: {token}")
+            print(f"✅ SELECTED: {token}")
             await client.send_message(
                 entity=TARGET_CHAT_ID,
                 message=event.message,
                 reply_to=TARGET_THREAD_ID
             )
             break  # надсилаємо лише один раз на повідомлення
+        else:
+            print(f"❌ Skipped: {token}")
 
 print("✅ MEXC userbot started")
 client.start()
