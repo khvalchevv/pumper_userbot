@@ -57,6 +57,28 @@ async def handler(event):
         else:
             print(f"❌ Skipped: {token}")
 
-print("✅ MEXC userbot started")
+async def preload_token_counts():
+    print("⏳ Loading previous 10000 messages from history...")
+    messages = await client.get_messages(SOURCE_CHANNEL_2, limit=10000)
+    added = 0
+    for msg in messages:
+        if msg.text:
+            tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", msg.text)
+            for token in tokens:
+                token = token.upper()
+        if token not in SELECTED_TOKENS:
+                    if token not in token_counts:
+                        token_counts[token] = 1
+                        added += 1
+                    else:
+                        token_counts[token] += 1
+    print(f"✅ Preloaded {added} tokens from history")
+    
+async def main():
+    await preload_token_counts()
+    print("✅ MEXC userbot started")
+    await client.run_until_disconnected()
+
 client.start()
-client.run_until_disconnected()
+with client:
+    client.loop.run_until_complete(main())
