@@ -1,6 +1,12 @@
 from telethon import TelegramClient, events
 import re
 
+TOKENS_TRACK_FILE = 'forwarded_tokens_mex.json'
+
+if os.path.exists(TOKENS_TRACK_FILE):
+    with open(TOKENS_TRACK_FILE):
+        token_counts = json.load(f)
+
 api_id = 22056618
 api_hash = "db2bf3b16f1788d38091014befe31c0d"
 session_name = "user_session"
@@ -27,6 +33,7 @@ async def handler(event):
     print(f"Found tokens: {found_tokens}")
 
     for token in found_tokens:
+        token = token.upper()
         if token in SELECTED_TOKENS:
             print(f"✅ SELECTED: {token}")
             await client.send_message(
@@ -35,6 +42,18 @@ async def handler(event):
                 reply_to=TARGET_THREAD_ID
             )
             break  # надсилаємо лише один раз на повідомлення
+
+        count = token_counts.get(token, 0)
+        if counts <3:
+            token_counts[token] = counts + 1
+            await client.send.message(
+                entity=TARGET_CHAT_ID,
+                message=event.message,
+                reply_to=TARGET_THREAD_ID
+            )
+            print(f"NEW {token}: {count + 1}/3")
+            with open(TOKENS_TREACK_FILE, "w") as f:
+                json.dump(token_counts, f)
         else:
             print(f"❌ Skipped: {token}")
 
