@@ -2,10 +2,11 @@ from telethon import TelegramClient, events
 import re
 import os
 import json
+
 TOKENS_TRACK_FILE = 'forwarded_tokens_mex.json'
 
 if os.path.exists(TOKENS_TRACK_FILE):
-    with open(TOKENS_TRACK_FILE):
+    with open(TOKENS_TRACK_FILE, "r") as f:
         token_counts = json.load(f)
 else:
     token_counts = {}
