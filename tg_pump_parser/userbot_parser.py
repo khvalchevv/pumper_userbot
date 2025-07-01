@@ -53,7 +53,7 @@ async def handler(event):
                 message=event.message,
                 reply_to=TARGET_THREAD_ID
             )
-            print(f"NEW {token}: {count + 1}/3")
+            print(f"NEW {token}: {counts + 1}/3")
             with open(TOKENS_TREACK_FILE, "w") as f:
                 json.dump(token_counts, f)
         else:
