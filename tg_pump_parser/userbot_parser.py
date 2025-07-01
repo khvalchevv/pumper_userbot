@@ -45,7 +45,7 @@ async def handler(event):
             )
             break  # надсилаємо лише один раз на повідомлення
 
-        count = token_counts.get(token, 0)
+        counts = token_counts.get(token, 0)
         if counts <3:
             token_counts[token] = counts + 1
             await client.send.message(
