@@ -7,7 +7,8 @@ TOKENS_TRACK_FILE = 'forwarded_tokens_mex.json'
 if os.path.exists(TOKENS_TRACK_FILE):
     with open(TOKENS_TRACK_FILE):
         token_counts = json.load(f)
-
+else:
+    token_counts = {}
 api_id = 22056618
 api_hash = "db2bf3b16f1788d38091014befe31c0d"
 session_name = "user_session"
