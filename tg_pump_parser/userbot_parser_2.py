@@ -13,9 +13,9 @@ SOURCE_CHANNEL_2 = "gate_5p"
 TARGET_CHAT_ID_2 = -1002604238211
 TARGET_THREAD_ID_2 = 2899
 
-SELECTED_TOKENS = ["PAWS", "IDOL", "ELDE", "SPK", "EDGEN", "PRAI", "WLD", "BLUE",
+SELECTED_TOKENS = ["IDOL", "ELDE", "SPK", "EDGEN", "PRAI", "WLD", "BLUE",
     "WHY", "ORDER", "FLY", "KEY", "LUCE", "ZCX", "KILO", "BID", "SHM", "BLZ", "OMG",
-    "AMB", "IMT", "PFWS"
+    "AMB", "IMT", "PFWS", "broccoli"
 ]
 
 TOKENS_TRACK_FILE = "forwarded_tokens_gate.json"
