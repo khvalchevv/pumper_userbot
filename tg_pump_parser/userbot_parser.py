@@ -48,7 +48,7 @@ async def handler(event):
         counts = token_counts.get(token, 0)
         if counts <3:
             token_counts[token] = counts + 1
-            await client.send.message(
+            await client.send_message(
                 entity=TARGET_CHAT_ID,
                 message=event.message,
                 reply_to=TARGET_THREAD_ID
