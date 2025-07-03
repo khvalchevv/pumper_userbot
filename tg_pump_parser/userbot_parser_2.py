@@ -15,7 +15,7 @@ TARGET_THREAD_ID_2 = 2899
 
 SELECTED_TOKENS = ["IDOL", "ELDE", "SPK", "EDGEN", "PRAI", "WLD", "BLUE",
     "WHY", "ORDER", "FLY", "KEY", "LUCE", "ZCX", "KILO", "BID", "SHM", "BLZ", "OMG",
-    "AMB", "IMT", "PFWS", "broccoli"
+    "AMB", "PFWS", "broccoli", "DBR", "GHIBLI", "EDGE", ""
 ]
 
 TOKENS_TRACK_FILE = "forwarded_tokens_gate.json"
