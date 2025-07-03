@@ -14,7 +14,7 @@ TARGET_CHAT_ID = -1002604238211
 TARGET_THREAD_ID =1745
 
 SELECTED_TOKENS = ["IDOL", "ELDE", "SPK", "EDGEN", "PRAI", "WLD", "BLUE",
-    "WHY", "ORDER", "FLY", "KEY", "LUCE", "ZCX", "KILO", "BID", "SHM", "BLZ", "OMG",
+    "WHY", "ORDER", "FLY", "KEY", "ZCX", "KILO", "BID", "SHM", "BLZ", "OMG",
     "AMB", "PFWS", "BROCCOLI", "DBR", "GHIBLI", "EDGE", "GEAR", "EGL1", "GFM", "EDGEN", "MYX", "AURASOL", "TAG", "NEIROETH", "DARK"]
 
 TOKENS_TRACK_FILE = "forwarded_tokens_mex.json"
