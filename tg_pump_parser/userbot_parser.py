@@ -30,7 +30,7 @@ async def preload_token_counts():
     added = 0
     for msg in messages:
         if msg.text:
-            tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", msg.text)
+            tokens = re.findall(r"\b(?=\w*[A-Z]([A-Z0-9]{2,10})\b", msg.text)
             for token in tokens:
                 token = token.upper()
                 if token not in SELECTED_TOKENS:
