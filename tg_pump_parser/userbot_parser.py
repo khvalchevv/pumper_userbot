@@ -1,7 +1,6 @@
 from telethon import TelegramClient, events
 import re
-import json
-import os
+
 
 api_id = 22056618
 api_hash = "db2bf3b16f1788d38091014befe31c0d"
@@ -16,38 +15,15 @@ TARGET_THREAD_ID =1745
 SELECTED_TOKENS = ["IDOL", "ELDE", "ORDER", "FLY", "ZCX", "BID", "SHM", "BLZ", "OMG",
     "AMB", "BROCCOLI", "DBR", "EDGE", "GEAR", "EGL1", "EDGEN", "MYX", "AURASOL", "TAG", "NEIROETH", "DARK", "GFM", "AURASOL", "TAG", "NEIROETH"]
 
-TOKENS_TRACK_FILE = "forwarded_tokens_mex.json"
-
-if os.path.exists(TOKENS_TRACK_FILE):
-    with open(TOKENS_TRACK_FILE, "r") as f:
-        token_counts = json.load(f)
-else:
-    token_counts = {}
-
-async def preload_token_counts():
-    print("⏳ Loading previous 10000 messages from history...")
-    messages = await client.get_messages(SOURCE_CHANNEL, limit=10000)
-    added = 0
-    for msg in messages:
-        if msg.text:
-            tokens = re.findall(r"\b(?=\w*[A-Z]([A-Z0-9]{2,10})\b", msg.text)
-            for token in tokens:
-                token = token.upper()
-                if token not in SELECTED_TOKENS:
-                    if token not in token_counts:
-                        token_counts[token] = 1
-                        added += 1
-                    else:
-                        token_counts[token] += 1
-    print(f"✅ Preloaded {added} tokens from history")
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
     text = event.raw_text
-    found = re.findall(r"\b[A-Z0-9]{2,10}\b", text)
-    tokens_in_msg = [t for t in found if t.isupper()]
+    found_tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", text)
+    print(f"Incoming message: {text}")
+    print(f"Found tokens: {found_tokens}")
 
-    for token in tokens_in_msg:
+    for token in found_tokens:
         if token in SELECTED_TOKENS:
             await client.send_message(
                 entity=TARGET_CHAT_ID,
@@ -56,22 +32,10 @@ async def handler(event):
             )
             print(f"✅ SELECTED: {token}")
             return
-
-        count = token_counts.get(token, 0)
-        if count < 3:
-            token_counts[token] = count + 1
-            await client.send_message(
-                entity=TARGET_CHAT_ID,
-                message=event.message,
-                reply_to=TARGET_THREAD_ID
-            )
-            print(f"🆕 NEW {token}: {count + 1}/3")
-            with open(TOKENS_TRACK_FILE, "w") as f:
-                json.dump(token_counts, f)
-            return
+        else:
+            print(f"Skipped: {token}")
 
 async def main():
-    await preload_token_counts()
     print("✅ First userbot started")
     await client.run_until_disconnected()
 
