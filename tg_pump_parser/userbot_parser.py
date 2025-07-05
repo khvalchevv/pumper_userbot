@@ -13,13 +13,13 @@ TARGET_CHAT_ID = -1002604238211
 TARGET_THREAD_ID =1745
 
 SELECTED_TOKENS = ["IDOL", "ELDE", "ORDER", "FLY", "ZCX", "BID", "SHM", "BLZ", "OMG",
-    "AMB", "BROCCOLI", "DBR", "EDGE", "GEAR", "EGL1", "EDGEN", "MYX", "AURASOL", "TAG", "NEIROETH", "DARK", "GFM", "AURASOL", "TAG", "NEIROETH"]
+    "AMB", "BROCCOLI", "DBR", "EDGE", "GEAR", "EGL1", "EDGEN", "MYX", "AURASOL", "TAG", "NEIROETH", "DARK", "GFM", "AURASOL", "TAG", "NEIROETH", "BLUM", "CROSS", "TGT"]
 
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
     text = event.raw_text
-    found_tokens = re.findall(r"\b[A-Z0-9]{2,10}\b", text)
+    found_tokens = re.findall(r"\$([A-Z0-9]{2,10})", text.upper())
     print(f"Incoming message: {text}")
     print(f"Found tokens: {found_tokens}")
 
