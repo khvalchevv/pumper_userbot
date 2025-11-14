@@ -1,43 +1,78 @@
-from telethon import TelegramClient, events
 import re
+import asyncio
+from telethon import TelegramClient, events
+from dotenv import load_dotenv
+import os
 
+# ----------------------------
+# Load environment variables
+# ----------------------------
+load_dotenv()
 
-api_id = 22056618
-api_hash = "db2bf3b16f1788d38091014befe31c0d"
-session_name = "user_session"
+API_ID = int(os.getenv("API_ID"))
+API_HASH = os.getenv("API_HASH")
+SESSION_NAME = os.getenv("SESSION_NAME", "user_session")
 
-client = TelegramClient(session_name, api_id, api_hash)
+SOURCE_CHANNEL = os.getenv("SOURCE_CHANNEL")
+TARGET_CHAT_ID = int(os.getenv("TARGET_CHAT_ID"))
+TARGET_THREAD_ID = int(os.getenv("TARGET_THREAD_ID", "0"))
 
-SOURCE_CHANNEL = "dt_5p"
-TARGET_CHAT_ID = -1002604238211
-TARGET_THREAD_ID =1745
+SELECTED_TOKENS = [
+    "BEAT", "ORDER", "FLY", "BLZ", "OMG", "BROCCOLI", "DBR",
+    "EDGE", "EGLI", "NEIROETH", "GFM", "TAG", "BLUM"
+]
 
-SELECTED_TOKENS = ["BEAT", "ORDER", "FLY", "BLZ", "OMG", "BROCCOLI", "DBR", "EDGE", "EGL1", "NEIROETH", "GFM", "TAG", "NEIROETH", "BLUM"]
+client = TelegramClient(SESSION_NAME, API_ID, API_HASH)
 
+# ----------------------------
+# Keepalive helper
+# ----------------------------
+async def keep_alive():
+    while True:
+        await client.get_dialogs()  # оновлює кеш діалогів
+        await asyncio.sleep(300)  # кожні 5 хвилин
 
+# ----------------------------
+# Event handler
+# ----------------------------
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
-    text = event.raw_text
-    found_tokens = re.findall(r"\$([A-Z0-9]{2,10})", text.upper())
-    print(f"Incoming message: {text}")
-    print(f"Found tokens: {found_tokens}")
+    try:
+        text = event.raw_text or ""
+        found_tokens = re.findall(r"\b([A-Z0-9]{2,10})\b", text.upper())
 
-    for token in found_tokens:
-        if token in SELECTED_TOKENS:
-            await client.send_message(
-                entity=TARGET_CHAT_ID,
-                message=event.message,
-                reply_to=TARGET_THREAD_ID
-            )
-            print(f"✅ SELECTED: {token}")
+        if not found_tokens:
             return
-        else:
-            print(f"Skipped: {token}")
 
+        print(f"📩 Incoming: {text}")
+        print(f"🔍 Found tokens: {found_tokens}")
+
+        target = await client.get_entity(TARGET_CHAT_ID)
+
+        for token in found_tokens:
+            if token in SELECTED_TOKENS:
+                await client.send_message(
+                    entity=target,
+                    message=f"{event.message.message}",
+                    reply_to=TARGET_THREAD_ID if TARGET_THREAD_ID > 0 else None
+                )
+                print(f"✅ Sent token: {token}")
+            else:
+                print(f"⏭ Skipped token: {token}")
+
+    except Exception as e:
+        print(f"⚠️ Error while handling message: {e}")
+
+# ----------------------------
+# Main entry
+# ----------------------------
 async def main():
-    print("✅ First userbot started")
+    print("🚀 Userbot started and listening...")
+    client.loop.create_task(keep_alive())
     await client.run_until_disconnected()
 
-client.start()
-with client:
-    client.loop.run_until_complete(main())
+if __name__ == "__main__":
+    client.start()
+    with client:
+        client.loop.run_until_complete(main())
+
