@@ -1,0 +1,56 @@
+from telethon import TelegramClient, events
+import re
+import json
+import os
+
+api_id = 22965618
+api_hash = "d2b073b1f61788d3809101abefe31c8d"
+session_name = "user_session"
+
+client = TelegramClient(session_name, api_id, api_hash)
+
+SOURCE_CHANNEL_2 = "gate_5p"
+TARGET_CHAT_ID_2 = -1002604238211
+TARGET_THREAD_ID_2 = 2899
+
+SELECTED_TOKENS = ["BOND", "LSK", "PALL", ""]
+TOKENS_TRACK_FILE = "forwarded_tokens.json"
+
+if os.path.exists(TOKENS_TRACK_FILE):
+    with open(TOKENS_TRACK_FILE, "r") as f:
+        token_counts = json.load(f)
+else:
+    token_counts = {}
+
+@client.on(events.NewMessage(chats=SOURCE_CHANNEL_2))
+async def handler(event):
+    text = event.raw_text
+    found = re.findall(r"\b[A-Z0-9]{2,10}\b", text)
+    tokens_in_msg = [t for t in found if t.isupper()]
+
+    for token in tokens_in_msg:
+        if token in SELECTED_TOKENS:
+            await client.send_message(
+                entity=TARGET_CHAT_ID_2,
+                message=event.message,
+                reply_to=TARGET_THREAD_ID_2
+            )
+            print(f"✅ SELECTED: {token}")
+            return
+
+        count = token_counts.get(token, 0)
+        if count < 2:
+            token_counts[token] = count + 1
+            await client.send_message(
+                entity=TARGET_CHAT_ID_2,
+                message=event.message,
+                reply_to=TARGET_THREAD_ID_2
+            )
+            print(f"🆕 NEW {token}: {count + 1}/2")
+            with open(TOKENS_TRACK_FILE, "w") as f:
+                json.dump(token_counts, f)
+            return
+
+client.start()
+print("✅ Second userbot started")
+client.run_until_disconnected()
